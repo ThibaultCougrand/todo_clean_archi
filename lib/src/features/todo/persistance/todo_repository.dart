@@ -14,8 +14,8 @@ class TodoRepository implements ITodoRepository {
     final result = <Todo>[];
 
     /// On récupère le Json sur sembast
-    final json = ref.read(localDbProvider).getData('todolist')
-        as List<Map<String, dynamic>>;
+    final json = await ref.read(localDbProvider).getData('todolist')
+        as List<Map<String, dynamic>>?;
 
     /// {
     ///   {
@@ -29,7 +29,7 @@ class TodoRepository implements ITodoRepository {
     /// }
 
     /// Si la liste n'est pas vide on transforme le json en Liste de Todo
-    if (json.isNotEmpty) {
+    if (json != null && json.isNotEmpty) {
       json.map((todo) => result.add(Todo.fromJson(todo)));
     }
 

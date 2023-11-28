@@ -5,6 +5,8 @@ import 'package:todo_clean_archi/src/infrastructure/local_db/i_local_db.dart';
 import 'package:todo_clean_archi/src/infrastructure/local_db/sembast/my_sembast.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   ///* Initialisation des dépendances (infrastructure)
   final ILocalDb localDb = await MySembast.initDb();
 
