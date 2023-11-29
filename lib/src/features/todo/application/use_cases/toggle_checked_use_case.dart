@@ -11,7 +11,7 @@ class ToggleCheckedUseCase {
 
   final Ref ref;
 
-  Future<void> run(bool flag, int pos) async {
+  Future<void> execute(bool flag, int pos) async {
     final repo = ref.read(todoRepositoryProvider);
 
     final datas = ref.read(todoListProvider);

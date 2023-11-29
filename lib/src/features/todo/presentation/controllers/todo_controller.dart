@@ -13,13 +13,13 @@ class TodoController extends _$TodoController {
   Future<void> setTodo(String name) async {
     final useCase = ref.read(setTodoUseCaseProvider);
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() => useCase.run(name));
+    state = await AsyncValue.guard(() => useCase.execute(name));
   }
 
   Future<void> toggleChecked(bool flag, int pos) async {
     final useCase = ref.read(toggleCheckedUseCaseProvider);
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() => useCase.run(flag, pos));
+    state = await AsyncValue.guard(() => useCase.execute(flag, pos));
   }
 
   Future<void> cleanTodo() async {

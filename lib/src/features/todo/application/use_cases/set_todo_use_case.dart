@@ -11,7 +11,7 @@ class SetTodoUseCase {
 
   final Ref ref;
 
-  Future<void> run(String name) async {
+  Future<void> execute(String name) async {
     final repo = ref.read(todoRepositoryProvider);
 
     final datas = ref.read(todoListProvider);
