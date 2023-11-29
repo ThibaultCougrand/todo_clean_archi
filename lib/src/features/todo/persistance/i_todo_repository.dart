@@ -4,6 +4,7 @@ import 'package:todo_clean_archi/src/features/todo/persistance/todo_repository.d
 
 part 'i_todo_repository.g.dart';
 
+/// Répository de la todolist, gère les échanges avec la base de données sembast
 abstract class ITodoRepository {
   Future<List<Todo>> fetchTodo();
   Future<void> setTodo(List<Todo> todos);

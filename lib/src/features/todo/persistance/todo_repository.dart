@@ -8,14 +8,16 @@ class TodoRepository implements ITodoRepository {
 
   final Ref ref;
 
+  /// Pour lire la todolist
   @override
   Future<List<Todo>> fetchTodo() async {
-    /// Liste vide pour recevoir le resultat serialisé
+    //* Liste vide pour recevoir le resultat serialisé
     final result = <Todo>[];
 
-    /// On récupère le Json sur sembast
+    //* On récupère le Json sur sembast
     final json = await ref.read(localDbProvider).getData('todolist');
-    //as List<Map<String, dynamic>>?;
+    //! Comprendre pourquoi le cast ne marche plus 
+    // as List<Map<String, dynamic>>?;
 
     /// {
     ///   {
@@ -28,25 +30,37 @@ class TodoRepository implements ITodoRepository {
     ///   }
     /// }
 
-    /// Si la liste n'est pas vide on transforme le json en Liste de Todo
+    //* Si la liste n'est pas vide on transforme le json en Liste de Todo
     if (json != null && json.isNotEmpty) {
-      json.forEach((todo) => result.add(Todo.fromJson(todo)));
+      for (var todo in json) {
+        result.add(Todo.fromJson(todo));
+      }
     }
 
     return result;
   }
 
+  /// Pour ajouter un todo
   @override
   Future<void> setTodo(List<Todo> todos) async {
+    //* Liste vide pour recevoir le resultat serialisé
     final datas = <Map<String, dynamic>>[];
+
+    //* Si la liste n'est pas vide on transforme le json en Liste de Todo
     if (todos.isNotEmpty) {
-      todos.forEach((todo) => datas.add(todo.toJson()));
+      for (Todo todo in todos) {
+        datas.add(todo.toJson());
+      }
+
+      //* Puis on envoie le Json sur sembast
       ref.read(localDbProvider).setData('todolist', datas);
     }
   }
 
+  /// Pour vider la todolist
   @override
   Future<void> cleanTodo() async {
+    //* On vide la valeur todolist sur sembast
     ref.read(localDbProvider).setData('todolist', []);
   }
 }

@@ -4,6 +4,7 @@ import 'package:todo_clean_archi/src/features/todo/persistance/i_todo_repository
 
 part 'todo_providers.g.dart';
 
+/// Provider pour partager l'état stocké en cache de la todolist
 @Riverpod(keepAlive: true)
 class TodoList extends _$TodoList {
   @override
@@ -11,10 +12,12 @@ class TodoList extends _$TodoList {
     return init();
   }
 
+  /// Initialise la valeur du provider pour la méthode build
   Future<List<Todo>> init() async {
     return ref.read(todoRepositoryProvider).fetchTodo();
   }
 
+  /// Permet de changer la valeur du provider
   void change(List<Todo> todos) {
     state = AsyncValue.data(todos);
   }

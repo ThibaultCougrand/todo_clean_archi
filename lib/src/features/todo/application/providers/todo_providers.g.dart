@@ -8,7 +8,9 @@ part of 'todo_providers.dart';
 
 String _$todoListHash() => r'd4795f1f9f34c8b27b5155a00ecd3fc122665535';
 
-/// See also [TodoList].
+/// Provider pour partager l'état stocké en cache de la todolist
+///
+/// Copied from [TodoList].
 @ProviderFor(TodoList)
 final todoListProvider = AsyncNotifierProvider<TodoList, List<Todo>>.internal(
   TodoList.new,

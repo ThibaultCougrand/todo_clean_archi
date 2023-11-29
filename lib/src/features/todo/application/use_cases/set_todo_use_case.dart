@@ -6,6 +6,7 @@ import 'package:todo_clean_archi/src/features/todo/persistance/i_todo_repository
 
 part 'set_todo_use_case.g.dart';
 
+/// Use case qui contient la logique métier pour ajouter un todo à la liste
 class SetTodoUseCase {
   SetTodoUseCase(this.ref);
 
@@ -13,12 +14,18 @@ class SetTodoUseCase {
 
   Future<void> execute(String name) async {
     final repo = ref.read(todoRepositoryProvider);
-
     final datas = ref.read(todoListProvider);
-    if (datas.hasValue) {
+
+    //* On vérifie que la todolist est bien chargée
+    if (datas.hasValue && datas.value != null) {
       final todoList = datas.value!;
+
+      //* On ajoute un nouveau todo à la liste
       todoList.add(Todo(name: name, checked: false));
+
+      //* On met à jour le répo (base de données sembast)
       await repo.setTodo(todoList);
+      //* On met à jour le provider pour l'interface
       ref.read(todoListProvider.notifier).change(todoList);
     }
   }

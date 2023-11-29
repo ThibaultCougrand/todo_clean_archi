@@ -7,17 +7,17 @@ import 'package:todo_clean_archi/src/infrastructure/local_db/sembast/my_sembast.
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  ///* Initialisation des dépendances (infrastructure)
+  //* Initialisation des dépendances (infrastructure)
   final ILocalDb localDb = await MySembast.initDb();
 
-  ///* Implémente les provider initialisés au lancement
+  //* Implémente les provider initialisés au lancement
   final container = ProviderContainer(
     overrides: [
       localDbProvider.overrideWithValue(localDb),
     ],
   );
 
-  ///* Initialise la lecture des providers
+  //* Initialise la lecture des providers
   container.read(localDbProvider);
 
   runApp(UncontrolledProviderScope(

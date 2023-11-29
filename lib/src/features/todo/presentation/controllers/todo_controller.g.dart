@@ -8,7 +8,9 @@ part of 'todo_controller.dart';
 
 String _$todoControllerHash() => r'2cf8d774489a6b848700fceccfb79b69a6ff3f85';
 
-/// See also [TodoController].
+/// Controller de la page TodoPage, permet de gérer l'état de la page quand un utilisateur effectue une action
+///
+/// Copied from [TodoController].
 @ProviderFor(TodoController)
 final todoControllerProvider =
     AutoDisposeAsyncNotifierProvider<TodoController, void>.internal(
