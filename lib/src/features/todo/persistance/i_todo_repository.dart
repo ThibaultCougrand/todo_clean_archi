@@ -7,6 +7,7 @@ part 'i_todo_repository.g.dart';
 abstract class ITodoRepository {
   Future<List<Todo>> fetchTodo();
   Future<void> setTodo(List<Todo> todos);
+  Future<void> cleanTodo();
 }
 
 @Riverpod(keepAlive: true)

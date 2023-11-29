@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_clean_archi/src/features/todo/application/providers/todo_providers.dart';
+import 'package:todo_clean_archi/src/features/todo/presentation/controllers/todo_controller.dart';
 
 class TodoPage extends ConsumerWidget {
-  final controller = TextEditingController();
+  final textController = TextEditingController();
 
   TodoPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final todoList = ref.watch(todoListProvider);
+    final controller = ref.read(todoControllerProvider.notifier);
+    final state = ref.watch(todoControllerProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -18,27 +21,43 @@ class TodoPage extends ConsumerWidget {
           child: Column(
             children: [
               TextField(
-                controller: controller,
+                controller: textController,
                 decoration: const InputDecoration(
                   hintText: 'entrez un mot',
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  //words.add(controller.text);
-                },
-                child: const Text("Ajouter"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => state.isLoading
+                        ? null
+                        : controller.setTodo(textController.text),
+                    child: const Text("Ajouter"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () =>
+                        state.isLoading ? null : controller.cleanTodo(),
+                    child: const Text("Clear"),
+                  ),
+                ],
               ),
               Expanded(
                 child: todoList.when(
                   data: (data) => ListView.builder(
                     itemCount: data.length,
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(data[index].name),
-                        onTap: () => data[index].checked
-                            ? print(data[index].name)
-                            : null,
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: ListTile(
+                          title: Text(data[index].name),
+                          onTap: () => !state.isLoading
+                              ? controller.toggleChecked(
+                                  !data[index].checked, index)
+                              : null,
+                          tileColor:
+                              data[index].checked ? Colors.green : Colors.red,
+                        ),
                       );
                     },
                   ),
