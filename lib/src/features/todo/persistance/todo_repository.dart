@@ -16,8 +16,6 @@ class TodoRepository implements ITodoRepository {
 
     //* On récupère le Json sur sembast
     final json = await ref.read(localDbProvider).getData('todolist');
-    //! Comprendre pourquoi le cast ne marche plus 
-    // as List<Map<String, dynamic>>?;
 
     /// {
     ///   {
@@ -33,7 +31,11 @@ class TodoRepository implements ITodoRepository {
     //* Si la liste n'est pas vide on transforme le json en Liste de Todo
     if (json != null && json.isNotEmpty) {
       for (var todo in json) {
-        result.add(Todo.fromJson(todo));
+
+        //* Vu que le case avec as ne marche pas on vérifie le type de chaque items
+        if (todo is Map<String, dynamic>) {
+          result.add(Todo.fromJson(todo));
+        }
       }
     }
 
