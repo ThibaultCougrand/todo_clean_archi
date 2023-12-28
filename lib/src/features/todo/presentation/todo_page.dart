@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_clean_archi/src/features/todo/application/providers/todo_providers.dart';
 import 'package:todo_clean_archi/src/features/todo/presentation/controllers/todo_controller.dart';
+import 'package:todo_clean_archi/src/utils/async_value_ui.dart';
 
 class TodoPage extends ConsumerWidget {
   final textController = TextEditingController();
@@ -13,6 +14,10 @@ class TodoPage extends ConsumerWidget {
     final todoList = ref.watch(todoListProvider);
     final controller = ref.read(todoControllerProvider.notifier);
     final state = ref.watch(todoControllerProvider);
+    ref.listen(
+      todoControllerProvider,
+      (_, state) => state.showAlertDialogOnError(context),
+    );
 
     return Scaffold(
       body: SafeArea(
