@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:todo_clean_archi/src/exceptions/app_exception.dart';
 import 'package:todo_clean_archi/src/features/todo/application/providers/todo_providers.dart';
 import 'package:todo_clean_archi/src/features/todo/domain/todo.dart';
 import 'package:todo_clean_archi/src/features/todo/persistance/i_todo_repository.dart';
@@ -13,31 +14,35 @@ class ToggleCheckedUseCase {
   final Ref ref;
 
   Future<void> execute(bool flag, int pos) async {
-    final repo = ref.read(todoRepositoryProvider);
-    final datas = ref.read(todoListProvider);
+    try {
+      final repo = ref.read(todoRepositoryProvider);
+      final datas = ref.read(todoListProvider);
 
-    //* On vérifie que la todolist est bien chargée
-    if (datas.hasValue && datas.value != null) {
-      final todoList = datas.value!;
-      int index = 0;
-      final List<Todo> finalList = [];
+      //* On vérifie que la todolist est bien chargée
+      if (datas.hasValue && datas.value != null) {
+        final todoList = datas.value!;
+        int index = 0;
+        final List<Todo> finalList = [];
 
-      //* On cherche l'élement todo qu'on a modifié
-      for (Todo todo in todoList) {
-        //* quand on le trouve on change sa valeur checked
-        if (index == pos) {
-          finalList.add(todo.copyWith(checked: flag));
-        //* sinon on renvoie la valeur de base
-        } else {
-          finalList.add(todo);
+        //* On cherche l'élement todo qu'on a modifié
+        for (Todo todo in todoList) {
+          //* quand on le trouve on change sa valeur checked
+          if (index == pos) {
+            finalList.add(todo.copyWith(checked: flag));
+            //* sinon on renvoie la valeur de base
+          } else {
+            finalList.add(todo);
+          }
+          index++;
         }
-        index++;
-      }
 
-      //* On met à jour le répo (base de données sembast)
-      await repo.setTodo(finalList);
-      //* On met à jour le provider pour l'interface
-      ref.read(todoListProvider.notifier).change(finalList);
+        //* On met à jour le répo (base de données sembast)
+        await repo.setTodo(finalList);
+        //* On met à jour le provider pour l'interface
+        ref.read(todoListProvider.notifier).change(finalList);
+      }
+    } catch (e) {
+      throw AppException.unknownError();
     }
   }
 }
